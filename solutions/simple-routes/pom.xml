@@ -15,6 +15,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <log4j2-version>2.13.3</log4j2-version>
+        <activemq-version>5.15.13</activemq-version>
     </properties>
 
     <dependencyManagement>
@@ -38,6 +39,32 @@
         <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-spring-main</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-activemq</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.activemq</groupId>
+            <artifactId>activemq-broker</artifactId>
+            <version>${activemq-version}</version>
+        </dependency>
+		<dependency>
+		    <groupId>org.apache.activemq</groupId>
+		    <artifactId>activemq-spring</artifactId>
+		    <version>${activemq-version}</version>
+		</dependency>
+        <dependency>
+            <groupId>org.apache.activemq</groupId>
+            <artifactId>activemq-client</artifactId>
+            <version>${activemq-version}</version>
+            <!-- lets use JMS 2.0 api but camel-jms still works with ActiveMQ 5.x that is JMS 1.1 only -->
+            <exclusions>
+                <exclusion>
+                    <groupId>org.apache.geronimo.specs</groupId>
+                    <artifactId>geronimo-jms_1.1_spec</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <!-- logging -->
