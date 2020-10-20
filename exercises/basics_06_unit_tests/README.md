@@ -95,3 +95,35 @@ public class OrderProcessingTest extends CamelTestSupport {
     }
 }
 ```
+CDI Unit-Tests with Test-Support
+===========================
+Extend `MyRoutes` by adding routeId to the route and enpointId to each endpoint
+
+Add dependency to the pom.xml
+```
+<dependency>
+    <groupId>com.gepardec.training.camel</groupId>
+    <artifactId>commons-test</artifactId>
+    <version>${project.version}</version>
+    <scope>test</scope>
+</dependency>
+```
+
+Extend `MyToutesTest`:
+- Add annotations `@Beans` and `@MockedRouteId`
+- Inject `MockEndpoint` for `resultEndpoint` of `MyRoutes`. Use annotations `@Uri("mock:xxx")` and `@MockedEndpointId(PastaOrderRouteBuilder.ENTRY_SEDA_ENDOINT_ID)`
+- Do the same for `inputEndpoint` but inject `ProducerTemplate`
+- Implement test method
+
+Hints
+-----
+First of all configure expected message count on `resultEndpoint`
+eggResult.expectedMessageCount(1);
+
+Send any body to inputEndpoint e.g. `producer.sendBody(order);`
+        
+Call `assertIsSatisfied()` on resultEndpoint to assert number of messages
+
+Get Exchange from resultEndpoint `getExchanges().get(0)`
+
+Check exchage content

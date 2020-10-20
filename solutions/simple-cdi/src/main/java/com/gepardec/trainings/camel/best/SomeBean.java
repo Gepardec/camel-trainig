@@ -4,7 +4,7 @@ import javax.inject.Named;
 import javax.inject.Singleton;
 
 @Singleton
-@Named("counterBean")
+@Named("someCounterBean")
 public class SomeBean {
 
     private int counter;

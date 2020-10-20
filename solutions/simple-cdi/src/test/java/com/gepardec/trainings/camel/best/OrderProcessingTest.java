@@ -21,7 +21,7 @@ public class OrderProcessingTest extends CamelTestSupport {
         resultEndpoint.expectedMessageCount(1);
         resultEndpoint.expectedBodiesReceived(orderIn + "x");
         
-        DirectEndpoint directOrderInEndpoint = resolveMandatoryEndpoint(MyRoutes.DIRECT_ORDER_IN, DirectEndpoint.class);
+        DirectEndpoint directOrderInEndpoint = resolveMandatoryEndpoint("direct:start", DirectEndpoint.class);
         
         
         template.sendBody("direct:start", orderIn);

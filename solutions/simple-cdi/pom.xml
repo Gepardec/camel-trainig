@@ -7,7 +7,7 @@
   <groupId>at.gepardec.trainings.camel</groupId>
   <artifactId>simple-cdi</artifactId>
   <packaging>jar</packaging>
-  <version>1.0-SNAPSHOT</version>
+  <version>1.0.0-SNAPSHOT</version>
 
   <name>Camel route using CDI in a standalone Java Container</name>
 
@@ -92,6 +92,12 @@
         <groupId>org.apache.camel</groupId>
         <artifactId>camel-test-cdi</artifactId>
         <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.gepardec.training.camel</groupId>
+      <artifactId>commons-test</artifactId>
+      <version>${project.version}</version>
+      <scope>test</scope>
     </dependency>
 
   </dependencies>
