@@ -118,7 +118,6 @@ Extend `MyToutesTest`:
 Hints
 -----
 First of all configure expected message count on `resultEndpoint`
-eggResult.expectedMessageCount(1);
 
 Send any body to inputEndpoint e.g. `producer.sendBody(order);`
         
