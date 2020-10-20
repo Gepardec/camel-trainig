@@ -30,7 +30,8 @@ public class EggOrderRouteBuilderIT extends CamelIntegrationTest {
         //RestServiceTestSupport.callPost("", json, 202);
 
         //TODO poll a from EggOrderRouteBuilder.OUTPUT_JMS_ENDPOINT_URI and assert that returned Exchange is null
-        //pollFromEndpoint(EggOrderRouteBuilder.OUTPUT_JMS_ENDPOINT_URI, 2000);
+//        Exchange exchange = pollFromEndpoint(EggOrderRouteBuilder.OUTPUT_JMS_ENDPOINT_URI, 2000);
+//        assertThat(exchange).isNull();
     }
 
     @Test
@@ -38,7 +39,7 @@ public class EggOrderRouteBuilderIT extends CamelIntegrationTest {
         String json = getFileAsString(EGGS_JSON_FILE_PATH);
 
         //TODO: do a post call using RestServiceTestSupport (resorce url "" and expected status 202)
-        RestServiceTestSupport.callPost("", json, 202);
+        //RestServiceTestSupport.callPost("", json, 202);
 
         //TODO poll a message from EggOrderRouteBuilder.OUTPUT_JMS_ENDPOINT_URI and assert that returned Exchange is not null, exchage body is not null and body contains correct amount for eggs order
 //        Exchange exchange = pollFromEndpoint(EggOrderRouteBuilder.OUTPUT_JMS_ENDPOINT_URI);
