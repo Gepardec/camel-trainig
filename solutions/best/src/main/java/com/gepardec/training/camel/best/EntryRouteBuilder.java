@@ -26,16 +26,20 @@ public final class EntryRouteBuilder extends RouteBuilder {
         restConfiguration().component("servlet").bindingMode(RestBindingMode.json)
                 .dataFormatProperty("prettyPrint", "true");
 
-        restConfiguration().component("netty-http").host("localhost").port(8080).bindingMode(RestBindingMode.auto);
+        //TODO EX1 Using documentation configure rest for using netty-http and binding on localhost at port 8080
+        //restConfiguration().component("netty-http").host("localhost").port(8080).bindingMode(RestBindingMode.auto);
 
-        rest("/best/")
-                .post()
-                .consumes(MediaType.APPLICATION_JSON)
-                .type(Order.class)
-                .id("best_rest")
-                .route().to(SplitterRouteBuilder.ENTRY_SEDA_ENDOINT_URI)
-                .setHeader(Exchange.HTTP_RESPONSE_CODE, constant(Response.Status.ACCEPTED.getStatusCode()))
-                .endRest();
+        //TODO EX1 Using documentation configure path "/best/" to accespt JSON objects via POST return http status accepted to the caller
+
+        //TODO EX2 Using documentation configure path "/best/" to accespt JSON objects via POST and map them to Order.class. Then forward object to Splitter entry endpoint and return http status accepted to the caller.
+//        rest("/best/")
+//                .post()
+//                .consumes(MediaType.APPLICATION_JSON)
+//                .type(Order.class)
+//                .id("best_rest")
+//                .route().to(SplitterRouteBuilder.ENTRY_SEDA_ENDOINT_URI)
+//                .setHeader(Exchange.HTTP_RESPONSE_CODE, constant(Response.Status.ACCEPTED.getStatusCode()))
+//                .endRest();
 
     }
 }

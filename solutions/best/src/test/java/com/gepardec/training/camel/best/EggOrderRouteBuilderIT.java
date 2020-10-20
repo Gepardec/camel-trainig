@@ -26,21 +26,28 @@ public class EggOrderRouteBuilderIT extends CamelIntegrationTest {
     @Test
     public void wrongInputJson_NothingInQueue() throws IOException {
         String json = getFileAsString(MILK_JSON_FILE_PATH);
-        RestServiceTestSupport.callPost("", json, 202);
-        pollFromEndpoint(Endpoints.EGG_ORDER_JMS_ENDPOINT.endpointUri(), 2000);
+        //TODO: do a post call using RestServiceTestSupport (resorce url "" and expected status 202)
+        //RestServiceTestSupport.callPost("", json, 202);
+
+        //TODO poll a from EggOrderRouteBuilder.OUTPUT_JMS_ENDPOINT_URI and assert that returned Exchange is null
+        //pollFromEndpoint(EggOrderRouteBuilder.OUTPUT_JMS_ENDPOINT_URI, 2000);
     }
 
     @Test
     public void correctInputJson_CorrectJavaObjectIsCreated() throws IOException {
         String json = getFileAsString(EGGS_JSON_FILE_PATH);
+
+        //TODO: do a post call using RestServiceTestSupport (resorce url "" and expected status 202)
         RestServiceTestSupport.callPost("", json, 202);
-        Exchange exchange = pollFromEndpoint(EggOrderRouteBuilder.OUTPUT_JMS_ENDPOINT_URI);
-        assertThat(exchange).isNotNull();
-        assertThat(exchange.getIn().getBody()).isNotNull();
-        assertThat(exchange.getIn().getBody(String.class))
-                .containsIgnoringCase("orderToProducer>")
-                .containsIgnoringCase("amount>110</")
-                .containsIgnoringCase("code>1</")
-                .containsIgnoringCase("partnerId>1</");
+
+        //TODO poll a message from EggOrderRouteBuilder.OUTPUT_JMS_ENDPOINT_URI and assert that returned Exchange is not null, exchage body is not null and body contains correct amount for eggs order
+//        Exchange exchange = pollFromEndpoint(EggOrderRouteBuilder.OUTPUT_JMS_ENDPOINT_URI);
+//        assertThat(exchange).isNotNull();
+//        assertThat(exchange.getIn().getBody()).isNotNull();
+//        assertThat(exchange.getIn().getBody(String.class))
+//                .containsIgnoringCase("orderToProducer>")
+//                .containsIgnoringCase("amount>110</")
+//                .containsIgnoringCase("code>1</")
+//                .containsIgnoringCase("partnerId>1</");
     }
 }

@@ -27,10 +27,13 @@ public class PastaOrderRouteBuilderIT extends CamelIntegrationTest {
         clearDB();
 
         String json = getFileAsString(MILK_JSON_FILE_PATH);
+
+        //TODO: do a post call using RestServiceTestSupport (resorce url "" and expected status 202)
         RestServiceTestSupport.callPost("", json, 202);
 
-        Table table = new Table(DbConnection.getDatasource(), "order_to_producer");
-        assertThat(table).hasNumberOfRows(0);
+        //TODO: using assertj-db make an assertion, that the db table order_to_producer contains no entries
+        // Table table = new Table(DbConnection.getDatasource(), "order_to_producer");
+        // assertThat(table).hasNumberOfRows(0);
     }
 
     @Test
@@ -38,14 +41,17 @@ public class PastaOrderRouteBuilderIT extends CamelIntegrationTest {
         clearDB();
 
         String json = getFileAsString(PASTA_JSON_FILE_PATH);
+
+        //TODO: do a post call using RestServiceTestSupport (resorce url "" and expected status 202)
         RestServiceTestSupport.callPost("", json, 202);
 
-        Table table = new Table(DbConnection.getDatasource(), "order_to_producer");
-
-        assertThat(table).hasNumberOfRows(1)
-                .column("partner_id").value().isEqualTo(1)
-                .column("item_code").value().isEqualTo(2)
-                .column("item_count").value().isEqualTo(120);
+        //TODO: using assertj-db make an assertion, that the db table order_to_producer contains single row with correct partner_id, item_code and item_value corresponding order_pasta.json
+//        Table table = new Table(DbConnection.getDatasource(), "order_to_producer");
+//
+//        assertThat(table).hasNumberOfRows(1)
+//                .column("partner_id").value().isEqualTo(1)
+//                .column("item_code").value().isEqualTo(2)
+//                .column("item_count").value().isEqualTo(120);
     }
 
     private void clearDB() throws IOException, SQLException {
