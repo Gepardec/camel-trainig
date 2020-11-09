@@ -7,7 +7,23 @@ public class MyRouteBuilder extends RouteBuilder {
     public void configure() {
 
         from("file:src/data?noop=true")
-                .to("file:target/messages/result");
+                .choice()
+                    .when(xpath("/person/city = 'Vienna'"))
+                    .log("AT")
+                    .to("file:target/messages/result/vienna")
+                .otherwise()
+                    .log("OTHER")
+                    .to("file:target/messages/result/others")
+                .end();
+
+        from("file:target/messages/result/vienna?noop=true")
+                .to("activemq:wien");
+
+        from("activemq:wien")
+                .to("log:read-wien")
+                .to("file:target/messages/result/wien");
+
+
     }
 
 }

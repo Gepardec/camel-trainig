@@ -2,10 +2,26 @@
 <!-- Configures the Camel Context-->
 
 <beans xmlns="http://www.springframework.org/schema/beans"
-       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:schemaLocation="
-       http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
-       http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd">
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="
+        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd
+        http://activemq.apache.org/schema/core http://activemq.apache.org/schema/core/activemq-core.xsd
+        ">
+
+  <!-- This creates an embedded ActiveMQ Broker -->
+  <broker xmlns="http://activemq.apache.org/schema/core"
+          brokerName="myBroker" id="broker" persistent="false"
+          useJmx="true" useShutdownHook="false" >
+    <transportConnectors>
+      <transportConnector uri="tcp://0.0.0.0:61616"/>
+    </transportConnectors>
+  </broker>
+
+
+  <bean class="org.apache.camel.component.activemq.ActiveMQComponent"
+        depends-on="broker" id="activemq">
+    <property name="brokerURL" value="tcp://localhost:61616"/>
+  </bean>
 
   <camelContext id="camelContext-36a8d3ba-2a31-44cc-ae01-1e9a04f7b88d" xmlns="http://camel.apache.org/schema/spring">
     <package>at.gepardec.trainings.camel</package>
