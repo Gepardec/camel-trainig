@@ -68,8 +68,9 @@
     </dependency>
 
     <dependency>
-      <groupId>org.apache.camel</groupId>
-      <artifactId>camel-test-cdi</artifactId>
+      <groupId>com.gepardec.training.camel</groupId>
+      <artifactId>commons-test</artifactId>
+      <version>${project.version}</version>
       <scope>test</scope>
     </dependency>
 

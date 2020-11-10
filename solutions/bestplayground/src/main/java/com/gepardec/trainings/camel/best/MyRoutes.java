@@ -7,13 +7,10 @@ import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.cdi.ImportResource;
 import org.apache.camel.cdi.Uri;
 
-/**
- * Configures all our Camel routes, components, endpoints and beans
- */
 public class MyRoutes extends RouteBuilder {
 
-    public static final String URL_FILE_ORDERS_IN = "file:src/orders?noop=true";
-    public static final String URL_FILE_ORDERS_OUT = "file:target/orders/processed";
+    public static final String URL_FILE_ORDERS_IN = "file://src/orders?noop=true";
+    public static final String URL_FILE_ORDERS_OUT = "file://target/orders/processed";
 
     @Inject
     @Uri(URL_FILE_ORDERS_IN)
@@ -25,7 +22,7 @@ public class MyRoutes extends RouteBuilder {
 
     @Override
     public void configure() {
-        from(inputEndpoint)
+        from(inputEndpoint).routeId("MyRoutes")
                 .to(resultEndpoint);
     }
 }
