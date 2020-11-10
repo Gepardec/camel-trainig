@@ -10,12 +10,12 @@ mvn archetype:generate \
   -DarchetypeArtifactId=camel-archetype-cdi \
   -DarchetypeVersion=3.4.2 \
   -DgroupId=com.gepardec.trainings.camel.best \
-  -DartifactId=best
+  -DartifactId=bestplayground
 ``` 
 Then run
 
 ``` 
-cd simple-cdi
+cd bestplayground
 mvn install
 mvn camel:run
 ``` 
