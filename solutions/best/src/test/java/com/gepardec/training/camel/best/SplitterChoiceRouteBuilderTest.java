@@ -8,6 +8,7 @@ import com.gepardec.training.camel.commons.test.routetest.MockedEndpointId;
 import com.gepardec.training.camel.commons.test.routetest.MockedRouteId;
 import org.apache.camel.Exchange;
 import org.apache.camel.ProducerTemplate;
+import org.apache.camel.builder.AdviceWithRouteBuilder;
 import org.apache.camel.cdi.Uri;
 import org.apache.camel.component.mock.MockEndpoint;
 import org.apache.camel.test.cdi.Beans;
@@ -24,9 +25,9 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(CamelCdiRunner.class)
-@Beans(classes = SplitterRouteBuilder.class)
-@MockedRouteId(SplitterRouteBuilder.ROUTE_ID)
-public class SplitterRouteBuilderTest extends CamelRouteCDITest {
+@Beans(classes = SplitterChoiceRouteBuilder.class)
+@MockedRouteId(SplitterChoiceRouteBuilder.ROUTE_ID)
+public class SplitterChoiceRouteBuilderTest extends CamelRouteCDITest {
 
     @Inject
     @Uri("mock:egg_result")
@@ -48,6 +49,10 @@ public class SplitterRouteBuilderTest extends CamelRouteCDITest {
     @MockedEndpointId(MilkOrderRouteBuilder.ENTRY_SEDA_ENDOINT_ID)
     private MockEndpoint milkResult;
 
+    @Inject
+    @Uri("mock:result")
+    private MockEndpoint mockResult;
+
     private Order order;
 
     @Before
@@ -65,7 +70,7 @@ public class SplitterRouteBuilderTest extends CamelRouteCDITest {
     }
 
     @After
-    public void reset(){
+    public void reset() {
         eggResult.reset();
         pastaResult.reset();
         meatResult.reset();
@@ -73,7 +78,7 @@ public class SplitterRouteBuilderTest extends CamelRouteCDITest {
     }
 
     @Test
-    public void correctInput_CorrectOutputToEggs(@Uri(SplitterRouteBuilder.ENTRY_SEDA_ENDOINT_URI) ProducerTemplate producer) throws Exception {
+    public void correctInput_CorrectOutputToEggs(@Uri(SplitterChoiceRouteBuilder.ENTRY_SEDA_ENDOINT_URI) ProducerTemplate producer) throws Exception {
         eggResult.expectedMessageCount(1);
 
         // Then
@@ -91,7 +96,7 @@ public class SplitterRouteBuilderTest extends CamelRouteCDITest {
     }
 
     @Test
-    public void correctInput_CorrectOutputToPasta(@Uri(SplitterRouteBuilder.ENTRY_SEDA_ENDOINT_URI) ProducerTemplate producer) throws Exception {
+    public void correctInput_CorrectOutputToPasta(@Uri(SplitterChoiceRouteBuilder.ENTRY_SEDA_ENDOINT_URI) ProducerTemplate producer) throws Exception {
 
         pastaResult.expectedMessageCount(1);
 
@@ -108,7 +113,7 @@ public class SplitterRouteBuilderTest extends CamelRouteCDITest {
     }
 
     @Test
-    public void correctInput_CorrectOutputToMilk(@Uri(SplitterRouteBuilder.ENTRY_SEDA_ENDOINT_URI) ProducerTemplate producer) throws InterruptedException {
+    public void correctInput_CorrectOutputToMilk(@Uri(SplitterChoiceRouteBuilder.ENTRY_SEDA_ENDOINT_URI) ProducerTemplate producer) throws InterruptedException {
         milkResult.expectedMessageCount(1);
 
         // Then
@@ -124,7 +129,7 @@ public class SplitterRouteBuilderTest extends CamelRouteCDITest {
     }
 
     @Test
-    public void correctInput_CorrectOutputToMeat(@Uri(SplitterRouteBuilder.ENTRY_SEDA_ENDOINT_URI) ProducerTemplate producer) throws InterruptedException {
+    public void correctInput_CorrectOutputToMeat(@Uri(SplitterChoiceRouteBuilder.ENTRY_SEDA_ENDOINT_URI) ProducerTemplate producer) throws InterruptedException {
         meatResult.expectedMessageCount(1);
 
         // Then
@@ -137,6 +142,23 @@ public class SplitterRouteBuilderTest extends CamelRouteCDITest {
         assertThat(order).isNotNull();
         assertThat(order.getAmount()).isEqualTo(140);
         assertThat(order.getPartnerId()).isEqualTo(1L);
+    }
+
+    @Test
+    public void correctInput_CorrectOutputForAll(@Uri(SplitterChoiceRouteBuilder.ENTRY_SEDA_ENDOINT_URI) ProducerTemplate producer) throws Exception {
+        AdviceWithRouteBuilder.adviceWith(context, SplitterChoiceRouteBuilder.ROUTE_ID, false, a ->
+//                a.weaveByToString(conte)
+                a.weaveAddLast().to("mock:result"));
+        mockResult.expectedMessageCount(1);
+        mockResult.expects(() -> {
+            assertThat(mockResult.allMessages()).isNotNull();
+            final Exchange exchange = mockResult.getExchanges().get(0);
+            final Order body = exchange.getIn().getBody(Order.class);
+            assertThat(body.getItems().size()).isEqualTo(4);
+        });
+
+        producer.sendBody(order);
+        mockResult.assertIsSatisfied();
     }
 
 }
