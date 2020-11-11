@@ -75,7 +75,7 @@ public class SplitterRouteBuilderIT {
 
         final Exchange exchange = result.getExchanges().get(0);
         assertThat(exchange).isNotNull();
-        assertThat(result.getReceivedCounter() == 3);
+        assertThat(result.getReceivedCounter()).isEqualTo(4);
 
     }
 }
