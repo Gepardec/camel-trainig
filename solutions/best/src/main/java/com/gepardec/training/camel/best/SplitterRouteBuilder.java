@@ -21,6 +21,7 @@ public class SplitterRouteBuilder extends RouteBuilder {
                 .routeId(ROUTE_ID)
                 .setHeader(ExchangeHeaders.PARTNER_ID, simple("${body.partnerId}"))
                 .split().method(OrderSplitter.class).streaming()
+                .log(simple("${header.CamelSplitIndex}").getText())
                 .to("seda:splitterDestination").id("best_splitter_destination")
                 .end();
     }
