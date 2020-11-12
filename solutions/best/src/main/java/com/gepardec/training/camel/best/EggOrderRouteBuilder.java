@@ -17,7 +17,7 @@ import javax.inject.Inject;
 public final class EggOrderRouteBuilder extends RouteBuilder {
 
     public static final String ENTRY_SEDA_ENDOINT_URI = "seda://egg_order_entry";
-    public static final String OUTPUT_JMS_ENDPOINT_URI = "jms://queue:eggs?disableReplyTo=true&username=camel&password=camel&connectionFactory=#JMSConnectionFactory";
+    public static final String OUTPUT_JMS_ENDPOINT_URI = "jms://queue:eggs?disableReplyTo=true&username=quarkus&password=quarkus&connectionFactory=#JMSConnectionFactory";
     public static final String OUTPUT_JMS_ENDPOINT_ID = "jms_eggs";
 
     @Inject
