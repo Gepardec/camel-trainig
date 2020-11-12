@@ -7,4 +7,9 @@ Add a route which splits a List of OrderItems.
 
 Make sure that the route splits only on demand and not upfront.
 
-Log out the name of the Orderitem and the CamelSplitIndex on every submessage. 
+Send every split part to a seda endpoint, also log the CamelSplitIndex. (hint simple language)
+
+Write an IT which checks: 
+```
+assertThat(result.getReceivedCounter() == list.size);
+```
