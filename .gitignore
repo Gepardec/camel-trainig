@@ -213,3 +213,4 @@ nbdist/
 .history
 
 # End of https://www.gitignore.io/api/git,eclipse,netbeans,intellij,visualstudiocode
+/solutions/simple-cdi/src/orders/.camel/ID-philinux-1605191509628-0-1
