@@ -19,14 +19,14 @@ public class MeatOrderRouteBuilderIT extends CamelIntegrationTest {
     @Before
     public void setup(){
         camelContext.getRegistry().bind("JMSConnectionFactory", new ConfigurationProducer().createConnectionFactory());
-        clearEndpointQueue(MeatOrderRouteBuilder.OUTPUT_JMS_ENDPOINT_URI);
+        clearEndpointQueue(MeatOrderRouteBuilder.OUTPUT_FILE_ENDPOINT_URI);
     }
 
     @Test
     public void lessThan100NothingInQueue() throws IOException {
         String json = getFileAsString(MEAT_LESS_JSON_FILE_PATH);
         RestServiceTestSupport.callPost("", json, 202);
-        Exchange exchange = pollFromEndpoint(MeatOrderRouteBuilder.OUTPUT_JMS_ENDPOINT_URI);
+        Exchange exchange = pollFromEndpoint(MeatOrderRouteBuilder.OUTPUT_FILE_ENDPOINT_URI);
         assertThat(exchange).isNull();
 
     }
@@ -35,7 +35,7 @@ public class MeatOrderRouteBuilderIT extends CamelIntegrationTest {
     public void greaterThan100SomethingInQueue() throws IOException {
         String json = getFileAsString(MEAT_GREATER_JSON_FILE_PATH);
         RestServiceTestSupport.callPost("", json, 202);
-        Exchange exchange = pollFromEndpoint(MeatOrderRouteBuilder.OUTPUT_JMS_ENDPOINT_URI);
+        Exchange exchange = pollFromEndpoint(MeatOrderRouteBuilder.OUTPUT_FILE_ENDPOINT_URI);
         assertThat(exchange).isNotNull();
         assertThat(exchange.getIn().getBody()).isNotNull();
         assertThat(exchange.getIn().getBody(String.class))
