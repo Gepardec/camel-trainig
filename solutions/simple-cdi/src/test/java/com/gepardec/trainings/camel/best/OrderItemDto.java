@@ -16,14 +16,16 @@ public class OrderItemDto {
 	public long getType() {
 		return type;
 	}
-	public void setType(long type) {
+	public OrderItemDto setType(long type) {
 		this.type = type;
+		return this;
 	}
 	public int getAmount() {
 		return amount;
 	}
-	public void setAmount(int amount) {
+	public OrderItemDto setAmount(int amount) {
 		this.amount = amount;
+		return this;
 	}
 
 	@Override

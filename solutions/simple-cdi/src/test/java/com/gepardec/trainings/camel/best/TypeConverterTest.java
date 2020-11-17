@@ -1,5 +1,7 @@
 package com.gepardec.trainings.camel.best;
 
+import org.apache.camel.Exchange;
+import org.apache.camel.Processor;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.component.mock.MockEndpoint;
 import org.apache.camel.test.junit4.CamelTestSupport;
@@ -11,7 +13,7 @@ import com.gepardec.training.camel.commons.domain.OrderItem;
 public class TypeConverterTest extends CamelTestSupport {
 
     @Test
-    public void when_order_in_orders_message_is_in_processed() throws InterruptedException {
+    public void convertBodyTo_uses_type_converter() throws InterruptedException {
 
         MockEndpoint resultEndpoint = resolveMandatoryEndpoint("mock:result", MockEndpoint.class);
         
@@ -19,7 +21,21 @@ public class TypeConverterTest extends CamelTestSupport {
         
         context().getTypeConverterRegistry().addTypeConverters(new OrderTypeConverters());
         
-        template.sendBody("direct:start", createOrder());
+        template.sendBody("direct:convert", createOrder());
+        
+        resultEndpoint.assertIsSatisfied();
+    }
+    
+    @Test
+    public void bean_uses_type_converter_implicite() throws InterruptedException {
+
+        MockEndpoint resultEndpoint = resolveMandatoryEndpoint("mock:result", MockEndpoint.class);
+        
+        resultEndpoint.expectedBodiesReceived(createOrderDto().setAmount(16));
+        
+        context().getTypeConverterRegistry().addTypeConverters(new OrderTypeConverters());
+        
+        template.sendBody("direct:bean", createOrder());
         
         resultEndpoint.assertIsSatisfied();
     }
@@ -28,11 +44,16 @@ public class TypeConverterTest extends CamelTestSupport {
     protected RouteBuilder createRouteBuilder() {
         return new RouteBuilder() {
             public void configure() {
-                from("direct:start")
+            	
+                from("direct:convert")
                 .convertBodyTo(OrderItemDto.class)
-                .log("result-processor: ${body}")
                 .to("mock:result");
-            }
+                
+                from("direct:bean")
+                .bean(new OrderDtoProcessor())
+                .to("mock:result");
+                
+           }
         };
     } 
     
@@ -43,4 +64,5 @@ public class TypeConverterTest extends CamelTestSupport {
 	private OrderItemDto createOrderDto() {
 		return new OrderItemDto(OrderItem.EGG, 15);
 	}
+	
 }
