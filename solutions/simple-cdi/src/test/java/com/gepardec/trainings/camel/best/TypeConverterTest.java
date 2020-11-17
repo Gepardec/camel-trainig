@@ -3,7 +3,9 @@ package com.gepardec.trainings.camel.best;
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.apache.camel.builder.RouteBuilder;
+import org.apache.camel.component.jackson.JacksonDataFormat;
 import org.apache.camel.component.mock.MockEndpoint;
+import org.apache.camel.model.dataformat.BindyDataFormat;
 import org.apache.camel.test.junit4.CamelTestSupport;
 import org.junit.Test;
 
@@ -40,6 +42,34 @@ public class TypeConverterTest extends CamelTestSupport {
         resultEndpoint.assertIsSatisfied();
     }
 
+    @Test
+    public void inputType_uses_typeConverter() throws InterruptedException {
+
+        MockEndpoint resultEndpoint = resolveMandatoryEndpoint("mock:result", MockEndpoint.class);
+        
+        resultEndpoint.expectedBodiesReceived(createOrderDto());
+        
+        context().getTypeConverterRegistry().addTypeConverters(new OrderTypeConverters());
+        
+        template.sendBody("direct:inputTypeConverter", createOrder());
+        
+        resultEndpoint.assertIsSatisfied();
+    }
+    
+
+    @Test
+    public void inputType_uses_transformer() throws InterruptedException {
+
+        MockEndpoint resultEndpoint = resolveMandatoryEndpoint("mock:result", MockEndpoint.class);
+        
+        resultEndpoint.expectedBodiesReceived(createOrderDto());
+                
+        template.sendBody("direct:inputTypeTransformer", createOrder());
+        
+        resultEndpoint.assertIsSatisfied();
+    }
+    
+
     @Override
     protected RouteBuilder createRouteBuilder() {
         return new RouteBuilder() {
@@ -53,6 +83,17 @@ public class TypeConverterTest extends CamelTestSupport {
                 .bean(new OrderDtoProcessor())
                 .to("mock:result");
                 
+                from("direct:inputTypeConverter").inputType(OrderItemDto.class)
+                .to("mock:result");                
+               
+                transformer()
+                .fromType(OrderItem.class)
+                .toType(OrderItemDto.class)
+                .withJava(OrderItemTransformer.class);
+               
+                from("direct:inputTypeTransformer").inputType(OrderItemDto.class)
+                .to("mock:result");                
+             
            }
         };
     } 
