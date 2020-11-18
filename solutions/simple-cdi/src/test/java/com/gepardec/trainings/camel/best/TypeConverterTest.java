@@ -1,11 +1,7 @@
 package com.gepardec.trainings.camel.best;
 
-import org.apache.camel.Exchange;
-import org.apache.camel.Processor;
 import org.apache.camel.builder.RouteBuilder;
-import org.apache.camel.component.jackson.JacksonDataFormat;
 import org.apache.camel.component.mock.MockEndpoint;
-import org.apache.camel.model.dataformat.BindyDataFormat;
 import org.apache.camel.test.junit4.CamelTestSupport;
 import org.junit.Test;
 
@@ -56,19 +52,19 @@ public class TypeConverterTest extends CamelTestSupport {
         resultEndpoint.assertIsSatisfied();
     }
     
-
     @Test
-    public void inputType_uses_transformer() throws InterruptedException {
+    public void from_and_to_is_identity() throws InterruptedException {
 
         MockEndpoint resultEndpoint = resolveMandatoryEndpoint("mock:result", MockEndpoint.class);
         
         resultEndpoint.expectedBodiesReceived(createOrderDto());
-                
-        template.sendBody("direct:inputTypeTransformer", createOrder());
+        
+        context().getTypeConverterRegistry().addTypeConverters(new OrderTypeConverters());
+        
+        template.sendBody("direct:from_and_to", createOrderDto());
         
         resultEndpoint.assertIsSatisfied();
     }
-    
 
     @Override
     protected RouteBuilder createRouteBuilder() {
@@ -85,15 +81,12 @@ public class TypeConverterTest extends CamelTestSupport {
                 
                 from("direct:inputTypeConverter").inputType(OrderItemDto.class)
                 .to("mock:result");                
-               
-                transformer()
-                .fromType(OrderItem.class)
-                .toType(OrderItemDto.class)
-                .withJava(OrderItemTransformer.class);
-               
-                from("direct:inputTypeTransformer").inputType(OrderItemDto.class)
-                .to("mock:result");                
-             
+
+                from("direct:from_and_to")
+                .convertBodyTo(OrderItem.class)
+                .convertBodyTo(OrderItemDto.class)
+                .to("mock:result");
+
            }
         };
     } 
