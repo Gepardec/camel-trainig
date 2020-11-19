@@ -17,22 +17,18 @@ import javax.inject.Inject;
 public class MeatOrderRouteBuilderTest extends CamelRouteCDITest {
 
     @Inject
-    @Uri("direct://tofile")
-    private ProducerTemplate input;
-
-    @Inject
     @Uri(MeatOrderRouteBuilder.ENTRY_SEDA_ENDOINT_URI)
     private ProducerTemplate seda;
 
     @Test
-    public void tt(){
+    public void createOrderItemSendToMeatEndpointAndCreateJsonFile() {
         OrderItem orderItem = new OrderItem();
-        orderItem.setAmount(101);
+        orderItem.setAmount(110);
         orderItem.setCode(4);
-        OrderToProducer orderToProducer = new OrderToProducer(orderItem,1);
+        OrderToProducer orderToProducer = new OrderToProducer(orderItem, 1);
 
         seda.sendBody(orderToProducer);
+
+        //TODO get created json file and compare to orderitem amount
     }
-
-
 }
