@@ -2,8 +2,8 @@ Create Validating Route
 
 Prerequisites: Exercise 09_choice
 
-Overview:
-In this Section you will learn how to create a camel route, which is validating a sepcific field of the incomming class.
+Overview: <br>
+In this Section you will learn how to create a camel route, which is validating a specific field of the incomming class.
 And transform this one item in a json File.
 
 Description:
