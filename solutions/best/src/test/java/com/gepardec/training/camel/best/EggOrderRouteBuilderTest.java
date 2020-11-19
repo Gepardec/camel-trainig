@@ -35,8 +35,7 @@ public class EggOrderRouteBuilderTest extends CamelRouteCDITest {
         orderToProducer.setPartnerId(3);
 
         result.expectedMessageCount(1);
-        
-        // Then
+
         sendToEndpoint(EggOrderRouteBuilder.ENTRY_SEDA_ENDOINT_URI, orderToProducer);
         result.assertIsSatisfied();
         final Exchange exchange = result.getExchanges().get(0);
@@ -47,15 +46,6 @@ public class EggOrderRouteBuilderTest extends CamelRouteCDITest {
                 .containsIgnoringCase("amount>2</")
                 .containsIgnoringCase("code>1</")
                 .containsIgnoringCase("partnerId>3</");
-        result.reset();
-    }
-
-    @Test
-    public void wrongInput_noMessageToQueue() throws InterruptedException{
-        result.expectedMessageCount(0);
-        // Then
-        sendToEndpoint(EggOrderRouteBuilder.ENTRY_SEDA_ENDOINT_URI, "string");
-        result.assertIsSatisfied();
         result.reset();
     }
 
