@@ -3,7 +3,7 @@ Creating Marshalling Route
 Prerequisites: Exercise 09_choice
 
 Overview: <br>
-- In this Section you will learn how to create a camel route, which should only retrieve a OrderToProducer.class (filter?) Item and marshal it to a xml File with jaxb.v<br>
+- In this Section you will learn how to create a camel route, which should only retrieve a OrderToProducer.class (filter?) Item and marshal it to a xml File with jaxb.<br>
 - This xml should be sent into a jms queue.
 
 Description: <br>
