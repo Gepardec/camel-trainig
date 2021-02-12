@@ -12,6 +12,7 @@ import org.apache.camel.builder.RouteBuilder;
 
 public class MyRouteBuilder extends RouteBuilder {
 
+    @Override
     public void configure() {
 
         from("file:target/messages/others?noop=true")
@@ -30,4 +31,4 @@ In order to add that route to the camel context, add a <package> element to the 
 ...
 ```
 
-Test the routes
+Test the routes manually
