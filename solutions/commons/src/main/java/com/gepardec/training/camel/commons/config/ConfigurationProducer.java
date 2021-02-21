@@ -30,8 +30,9 @@ public class ConfigurationProducer {
         return DbConnection.getDatasource();
     }
 
-    @Bean
-    public JmsComponent jms() {
+    @Produces
+    @Named("jms")
+    public JmsComponent bestjms() {
         return JmsComponent.jmsComponentAutoAcknowledge(createConnectionFactory());
     }
     

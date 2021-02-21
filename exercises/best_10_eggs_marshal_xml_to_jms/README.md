@@ -25,7 +25,7 @@ You can use the following route:
             // convert here to XML
             .log("Sending ${body} to " + OUTPUT_JMS_ENDPOINT_URI)
             // set the exchange pattern to inOnly
-            .to(jmsEndpoint).id(OUTPUT_JMS_ENDPOINT_ID);
+            .to(jmsEndpoint);
 ```
 
 For the integration test you may use the provided EggOrderIT.java and files in testmessages.
